@@ -1,0 +1,12 @@
+# To load required modules on Euler cluster, run:
+# module load stack/2024-06 cuda/12.1.1
+
+transformers
+opencv-python
+supervision
+
+# PyTorch with CUDA 12.1
+--extra-index-url https://download.pytorch.org/whl/cu121
+
+torch>=2.3.1
+torchvision>=0.18.1
