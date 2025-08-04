@@ -13,6 +13,7 @@ from utils.common_utils import CommonUtils
 from utils.mask_dictionary_model import MaskDictionaryModel, ObjectInfo
 import json
 import copy
+from masks_to_png import convert_masks_to_png
 
 """
 Step 1: Environment settings and model initialization
@@ -44,14 +45,16 @@ grounding_model = AutoModelForZeroShotObjectDetection.from_pretrained(model_id).
 
 # setup the input image and text prompt for SAM 2 and Grounding DINO
 # VERY important: text queries need to be lowercased + end with a dot
-text = "car."
+# text = "car."
+text = "car and pedestrian and traffic lights."
 
 # `video_dir` a directory of JPEG frames with filenames like `<frame_index>.jpg`  
-video_dir = "notebooks/videos/car"
+# video_dir = "notebooks/videos/car"
+video_dir = "/cluster/home/hailuo/project/shape-of-motion/data_root/iphone/bridge_with_traffic_lights/rgb/1x_val_jpg"
 # 'output_dir' is the directory to save the annotated frames
-output_dir = "./outputs"
+output_dir = "./outputs_with_traffic_lights_val"
 # 'output_video_path' is the path to save the final video
-output_video_path = "./outputs/output.mp4"
+output_video_path = "./outputs_with_traffic_lights_val/output.mp4"
 # create the output directory
 CommonUtils.creat_dirs(output_dir)
 mask_data_dir = os.path.join(output_dir, "mask_data")
@@ -201,3 +204,8 @@ Step 6: Draw the results and save the video
 CommonUtils.draw_masks_and_box_with_supervision(video_dir, mask_data_dir, json_data_dir, result_dir)
 
 create_video_from_images(result_dir, output_video_path, frame_rate=15)
+
+"""
+Step 7: Convert the masks to PNG images
+"""
+convert_masks_to_png(mask_data_dir, os.path.join(output_dir, "mask_png"))
